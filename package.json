@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/HennaFatemah/smart-detect-api/issues"
   },
-  "homepage": "https://github.com/HennaFatemah/smart-detect-api#readme"
+  "homepage": "https://github.com/HennaFatemah/smart-detect-api#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }
