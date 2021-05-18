@@ -1,0 +1,20 @@
+{
+  "name": "smart-detect-api",
+  "version": "1.0.0",
+  "description": "Smart Detect BackEnd Api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HennaFatemah/smart-detect-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HennaFatemah/smart-detect-api/issues"
+  },
+  "homepage": "https://github.com/HennaFatemah/smart-detect-api#readme"
+}
