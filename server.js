@@ -25,7 +25,7 @@ const database = {
 }
 
 app.get('/', (req, res)=>{
-    res.send('get endpoint is working');
+    res.send(database.users);
 })
 
 app.post('/signin', (req, res)=>{
