@@ -1,8 +1,10 @@
 const express = require('express');
+// const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 const app = express();
-const bcrypt = require('bcrypt-nodejs');
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+app.use(cors())
 
 const database = {
     users: [
@@ -97,5 +99,5 @@ app.put('/image', (req, res)=>{
 })
 
 app.listen(3000, ()=> {
-    console.log('app is running on port 3000');
+    console.log('CORS-enabled web server is running on port 3000');
 })
