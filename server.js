@@ -13,7 +13,9 @@ const db = knex({
     }
 })
 
-db.select('*').from('users')
+db
+    .select('*')
+    .from('users')
     .then(data => {
         console.log(data);
     })
@@ -23,12 +25,33 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors())
 
-app.get('/', (req, res)=>{
-    res.send(database.users);
+app.get('/', (_, res)=>{
+    res.send(db.select('*').from('users'));
 })
 
 app.post('/signin', (req, res)=>{
-    
+    const { email, password } = req.body;
+
+    db
+        .select('email', 'hash')
+        .from('login')
+        .where('email', '=', email)
+        .then(data => {
+            const isValid = bcrypt.compareSync(password, data[0].hash);
+            if(isValid){
+                return db
+                    .select('*')
+                    .from('users')
+                    .where('email', '=', email)
+                    .then(user => {
+                        res.json(user[0])
+                    })
+                    .catch(err => res.status(400).json('unable to get user'))
+            } else {
+                res.status(400).json('wrong credentials')
+            }
+        })
+        .catch(err => res.status(400).json('wrong credentials'))
 })
 
 app.post('/register', (req, res)=> {
@@ -37,27 +60,28 @@ app.post('/register', (req, res)=> {
 
     db
         .transaction(trx => {
-            trx.insert({
-                hash: hash,
-                email: email
-            })
-            .into('login')
-            .returning('email')
-            .then(loginEmail => {
-                return trx('users')
-                    .returning('*')
-                    .insert({
-                        email: loginEmail[0],
-                        name: name,
-                        joined: new Date()
-                    }).then(user => {
-                        res.json(user[0]);
-                    })
-            })
-            .then(trx.commit)
-            .catch(trx.rollback)
+            trx
+                .insert({
+                    hash: hash,
+                    email: email
+                })
+                .into('login')
+                .returning('email')
+                .then(loginEmail => {
+                    return trx('users')
+                        .returning('*')
+                        .insert({
+                            email: loginEmail[0],
+                            name: name,
+                            joined: new Date()
+                        }).then(user => {
+                            res.json(user[0]);
+                        })
+                })
+                .then(trx.commit)
+                .catch(trx.rollback)
         })
-        .catch(err => res.status(400).json('unable to register'))
+            .catch(err => res.status(400).json('unable to register'))
 })
 
 app.get('/profile/:id', (req, res)=>{
@@ -74,7 +98,8 @@ app.get('/profile/:id', (req, res)=>{
             } else {
                 res.status(400).json('user not found')
             }
-    }).catch(err => res.status(400).json('error getting user'))
+    })
+        .catch(err => res.status(400).json('error getting user'))
 })
 
 app.put('/image', (req, res)=>{
@@ -86,7 +111,7 @@ app.put('/image', (req, res)=>{
         .then(entries => {
             res.json(entries[0])
         })
-        .catch(err => res.status(400).json('unable to get entries'))
+            .catch(err => res.status(400).json('unable to get entries'))
 })
 
 app.listen(3000, ()=> {
