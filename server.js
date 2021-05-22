@@ -41,6 +41,8 @@ app.get('/profile/:id', profile.handleProfileGet(db))
 
 app.put('/image', image.handleImage(db))
 
+app.post('/imageurl', (req, res) => image.handleApiCall(req, res))
+
 app.listen(3000, ()=> {
     console.log('CORS-enabled web server is running on port 3000');
 })
