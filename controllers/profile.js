@@ -1,4 +1,4 @@
-const handleProfileGet = (req, res)=>{
+const handleProfileGet = (db)=> (req, res)=>{
     const { id } = req.params;
     db
         .select('*')

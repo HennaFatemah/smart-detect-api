@@ -33,13 +33,13 @@ app.get('/', (_, res)=>{
     res.send(db.select('*').from('users'));
 })
 
-app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
+app.post('/signin', signin.handleSignin(db, bcrypt))
 
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
+app.post('/register', register.handleRegister(db, bcrypt))
 
-app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
+app.get('/profile/:id', profile.handleProfileGet(db))
 
-app.put('/image', (req, res) => { image.handleImage(req, res, db) })
+app.put('/image', image.handleImage(db))
 
 app.listen(3000, ()=> {
     console.log('CORS-enabled web server is running on port 3000');
